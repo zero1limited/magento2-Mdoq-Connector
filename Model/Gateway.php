@@ -43,7 +43,7 @@ class Gateway
         );
 
         $pipes = array();
-        $process = proc_open($cmd, $descriptor, $pipes);
+        $process = proc_open($cmd, $descriptor, $pipes, null, array('cmd' => $cmd));
         if (is_resource($process)) {
             // Input
             fputs($pipes[0], $code);
