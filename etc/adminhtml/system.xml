@@ -13,8 +13,8 @@
                 </field>
                 <field id="url_key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>URL Key</label>
-                    <!--<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>-->
                     <backend_model>Zero1\Gateway\Model\Config\Backend\UrlKeyInterface</backend_model>
+                    <frontend_model>Zero1\Gateway\Block\System\Config\Form\Field\UrlKey</frontend_model>
                 </field>
             </group>
         </section>
