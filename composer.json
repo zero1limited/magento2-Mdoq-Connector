@@ -20,6 +20,7 @@
     },
     "extra": {
         "map": [
+            [ "app/zero1/gateway/di.xml", "global/di.xml" ],
             [ "global/di.xml", "app/zero1/gateway/di.xml" ]
         ]
     }
