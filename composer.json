@@ -17,5 +17,10 @@
         "psr-4": {
             "Zero1\\Gateway\\": ""
         }
+    },
+    "extra": {
+        "map": [
+            [ "global/di.xml", "app/zero1/gateway/di.xml" ]
+        ]
     }
 }
