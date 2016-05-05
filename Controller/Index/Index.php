@@ -42,7 +42,7 @@ class Index extends \Magento\Framework\App\Action\Action
         }
 
         $this->gateway->run();
-        return;
+        die;
     }
 
     public function isEnabled()
