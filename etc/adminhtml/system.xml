@@ -1,20 +1,25 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="zero1_gateway" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="0" showInStore="0">
-            <label>Zero1 Gateway</label>
+        <section id="mdoq_connector" translate="label" type="text" sortOrder="102" showInDefault="1" showInWebsite="0" showInStore="0">
+            <label>MDOQ Connector</label>
             <tab>service</tab>
-            <resource>Zero1_Gateway::config_gateway</resource>
-            <group id="gateway" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                <label>Gateway Settings</label>
+            <resource>Mdoq_Connector::config_connector</resource>
+            <group id="connector" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Connector Settings</label>
                 <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>Enable Gateway</label>
+                    <label>Enable MDOQ Connector</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
                 <field id="url_key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
-                    <label>URL Key</label>
-                    <backend_model>Zero1\Gateway\Model\Config\Backend\UrlKeyInterface</backend_model>
-                    <frontend_model>Zero1\Gateway\Block\System\Config\Form\Field\UrlKey</frontend_model>
+                    <label>API Endpoint</label>
+                    <backend_model>Mdoq\Connector\Model\Config\Backend\UrlKeyInterface</backend_model>
+                    <frontend_model>Mdoq\Connector\Block\System\Config\Form\Field\UrlKey</frontend_model>
+                </field>
+                <field id="auth_key" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Auth Key</label>
+                    <backend_model>Mdoq\Connector\Model\Config\Backend\AuthKeyInterface</backend_model>
+                    <frontend_model>Mdoq\Connector\Block\System\Config\Form\Field\AuthKey</frontend_model>
                 </field>
             </group>
         </section>

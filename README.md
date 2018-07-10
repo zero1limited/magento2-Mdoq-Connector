@@ -1,2 +1,2 @@
-# magento2-Gateway
+# magento2-Connector
 

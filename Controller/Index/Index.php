@@ -1,30 +1,33 @@
 <?php
-namespace Zero1\Gateway\Controller\Index;
+namespace Mdoq\Connector\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Zero1\Gateway\Model\Gateway;
+use Mdoq\Connector\Model\Connector;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Controller\ResultFactory;
 
 class Index extends \Magento\Framework\App\Action\Action
 {
-    const CONFIG_PATH_ENABLED = 'zero1_gateway/gateway/enable';
-    const CONFIG_PATH_ENDPOINT = 'zero1_gateway/gateway/url_key';
+    const CONFIG_PATH_ENABLED = 'mdoq_connector/connector/enable';
+    const CONFIG_PATH_ENDPOINT = 'mdoq_connector/connector/url_key';
+    const CONFIG_PATH_AUTHKEY = 'mdoq_connector/connector/auth_key';
 
     /** @var ScopeConfigInterface Magento\Framework\App\Config */
     protected  $configInterface;
 
-    protected $gateway;
+    protected $connector;
 
     public function __construct(
         Context $context,
         ScopeConfigInterface $configInterface,
-        Gateway $gateway
+        Connector $connector
     ){
         $this->configInterface = $configInterface;
-        $this->gateway = $gateway;
+        $this->connector = $connector;
+        $this->resultFactory = $context->getResultFactory();
         parent::__construct($context);
     }
 
@@ -40,8 +43,16 @@ class Index extends \Magento\Framework\App\Action\Action
         $this->_request = $request;
 
         if(($this->getEndpoint() == ltrim($this->getRequest()->getUri()->getPath(), '/')) && $this->isEnabled()){
-            $this->gateway->run();
-            die;
+            if($this->getAuthKey() != null && $this->getAuthKey() != $this->getRequest()->getHeader('x-mdoq-auth')) {
+                $output = $this->resultFactory->create(ResultFactory::TYPE_RAW);
+                $output->setHeader('Content-Type','text/plain')->setContents('MDOQ Connector Error: authentication failed. Check the auth keys in your Magento Admin match the auth keys set against your live instance in MDOQ.');
+                return $output;
+            } else {
+                $jobOutput = $this->connector->run();
+                $output = $this->resultFactory->create(ResultFactory::TYPE_RAW);
+                $output->setHeader('Content-Type','text/plain')->setContents($jobOutput);
+                return $output;
+            }
         }
 
         $profilerKey = 'CONTROLLER_ACTION:' . $request->getFullActionName();
@@ -89,8 +100,9 @@ class Index extends \Magento\Framework\App\Action\Action
         }
 
         if(!$this->isEnabled()){
-            echo 'Module Disabled';
-            return;
+            $output = $this->resultFactory->create(ResultFactory::TYPE_RAW);
+            $output->setHeader('Content-Type','text/plain')->setContents('The MDOQ connector is disabled.');
+            return $output;
         }
     }
 
@@ -102,5 +114,10 @@ class Index extends \Magento\Framework\App\Action\Action
     public function getEndpoint()
     {
         return $this->configInterface->getValue(self::CONFIG_PATH_ENDPOINT);
+    }
+
+    public function getAuthKey()
+    {
+        return $this->configInterface->getValue(self::CONFIG_PATH_AUTHKEY);
     }
 }

@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="standard">
-        <route id="zero1_gateway" frontName="zero1-gateway">
-            <module name="Zero1_Gateway" />
+        <route id="mdoq_connector" frontName="mdoq-connector">
+            <module name="Mdoq_Connector" />
         </route>
     </router>
 </config>

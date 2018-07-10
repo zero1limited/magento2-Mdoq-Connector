@@ -1,11 +1,11 @@
 <?php
-namespace Zero1\Gateway\Model\Config\Backend;
+namespace Mdoq\Connector\Model\Config\Backend;
 
 use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 
 class UrlKey extends \Magento\Framework\App\Config\Value implements \Magento\Framework\App\Config\ValueInterface
 {
-	const TARGET_PATH = 'zero1-gateway/index/index';
+	const TARGET_PATH = 'mdoq-connector/index/index';
 	/**
 	 * @var \Magento\Framework\ObjectManagerInterface
 	 */
@@ -40,9 +40,28 @@ class UrlKey extends \Magento\Framework\App\Config\Value implements \Magento\Fra
 		$this->_objectManager = $objectManagerInterface;
 	}
 
+	public function beforeSave()
+    {
+        $value = $this->getValue();
+
+        preg_match('#[^a-zA-Z0-9]#', $value, $matches);
+
+        if(count($matches) > 0){
+            throw new \Exception('API endpoint may only contain [a-z0-9A-Z]');
+        }
+
+        if(strlen($value) != 255) {
+            throw new \Exception('API endpoint must be exactly 255 characters');
+        }
+
+        $this->setValue($value);
+        return parent::beforeSave();
+    }
+
 	public function afterSave()
 	{
 		if($this->isValueChanged()){
+		    if($this->getValue())
 			$model = $this->getUrlRewrite();
 			$model->setRequestPath($this->getValue());
 			$model->save();
@@ -71,7 +90,7 @@ class UrlKey extends \Magento\Framework\App\Config\Value implements \Magento\Fra
 					->setTargetPath(self::TARGET_PATH)
 					->setRedirectType(0)
 					->setStoreId(1) //TODO revisit
-					->setDescription('Url rewrite to allow access to the gateway module');
+					->setDescription('Url rewrite to allow access to the MDOQ Connector module');
 			}
 		}
 		return $this->_urlRewrite;
