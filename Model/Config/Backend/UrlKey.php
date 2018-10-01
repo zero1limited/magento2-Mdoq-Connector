@@ -6,6 +6,7 @@ use Magento\UrlRewrite\Controller\Adminhtml\Url\Rewrite;
 class UrlKey extends \Magento\Framework\App\Config\Value implements \Magento\Framework\App\Config\ValueInterface
 {
 	const TARGET_PATH = 'mdoq-connector/index/index';
+
 	/**
 	 * @var \Magento\Framework\ObjectManagerInterface
 	 */
@@ -16,15 +17,19 @@ class UrlKey extends \Magento\Framework\App\Config\Value implements \Magento\Fra
 	 */
 	protected $_urlRewrite;
 
-	/**
-	 * @param \Magento\Framework\Model\Context $context
-	 * @param \Magento\Framework\Registry $registry
+    protected $storeManager;
+
+    /**
+     * @param \Magento\Framework\Model\Context $context
+     * @param \Magento\Framework\Registry $registry
 	 * @param ScopeConfigInterface $config
-	 * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
-	 * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
-	 * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
-	 * @param array $data
-	 */
+     * @param \Magento\Framework\App\Cache\TypeListInterface $cacheTypeList
+     * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
+     * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
+     * @param \Magento\Framework\ObjectManagerInterface $objectManagerInterface
+     * @param \Magento\Store\Model\StoreManagerInterface $storeManagerInterface
+     * @param array $data
+     */
 	public function __construct(
 		\Magento\Framework\Model\Context $context,
 		\Magento\Framework\Registry $registry,
@@ -33,11 +38,13 @@ class UrlKey extends \Magento\Framework\App\Config\Value implements \Magento\Fra
 		\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
 		\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 		\Magento\Framework\ObjectManagerInterface $objectManagerInterface,
+        \Magento\Store\Model\StoreManagerInterface $storeManagerInterface,
 		array $data = []
 	) {
 		parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
 
 		$this->_objectManager = $objectManagerInterface;
+        $this->storeManager = $storeManagerInterface;
 	}
 
 	public function beforeSave()
@@ -61,38 +68,40 @@ class UrlKey extends \Magento\Framework\App\Config\Value implements \Magento\Fra
 	public function afterSave()
 	{
 		if($this->isValueChanged()){
-		    if($this->getValue())
-			$model = $this->getUrlRewrite();
-			$model->setRequestPath($this->getValue());
-			$model->save();
+            $this->updateUrlRewrites();
 		}
 		return parent::afterSave();
 	}
-	/**
-	 * Get URL rewrite from request
-	 *
-	 * @return \Magento\UrlRewrite\Model\UrlRewrite
-	 */
-	protected function getUrlRewrite()
+
+	protected function updateUrlRewrites()
 	{
-		if (!$this->_urlRewrite) {
-			/** @var \Magento\UrlRewrite\Model\UrlRewrite $urlRewrite */
-			$urlRewrite = $this->_objectManager->create('Magento\UrlRewrite\Model\UrlRewrite');
-			/** @var \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection $collection */
-			$collection = $urlRewrite->getCollection();
-			$collection->addFieldToFilter('target_path' , self::TARGET_PATH);
-			$collection->load();
-			if($collection->count()){
-				$this->_urlRewrite = $collection->getFirstItem();
-			}else{
-				$this->_urlRewrite = $urlRewrite;
-				$this->_urlRewrite->setEntityType(Rewrite::ENTITY_TYPE_CUSTOM)
-					->setTargetPath(self::TARGET_PATH)
-					->setRedirectType(0)
-					->setStoreId(1) //TODO revisit
-					->setDescription('Url rewrite to allow access to the MDOQ Connector module');
-			}
-		}
-		return $this->_urlRewrite;
+        // delete the current ones
+        /** @var \Magento\UrlRewrite\Model\UrlRewrite $urlRewrite */
+        $urlRewrite = $this->_objectManager->create('Magento\UrlRewrite\Model\UrlRewrite');
+        /** @var \Magento\UrlRewrite\Model\ResourceModel\UrlRewriteCollection $collection */
+        $collection = $urlRewrite->getCollection();
+        $collection->addFieldToFilter('target_path', self::TARGET_PATH);
+        foreach($collection as $urlRewrite){
+            $urlRewrite->delete();
+        }
+
+        // if no value don't want any
+        if(!$this->getValue()){
+            return $this;
+        }
+
+        // add the new ones
+        foreach($this->storeManager->getStores() as $store){
+            $urlRewrite = $this->_objectManager->create('Magento\UrlRewrite\Model\UrlRewrite');
+            $urlRewrite->setEntityType(Rewrite::ENTITY_TYPE_CUSTOM)
+                ->setRequestPath($this->getValue())
+                ->setTargetPath(self::TARGET_PATH)
+                ->setRedirectType(0)
+                ->setStoreId($store->getId())
+                ->setDescription('Url rewrite to allow access to the MDOQ Connector module');
+            $urlRewrite->save();
+        }
+
+        return $this;
 	}
 }

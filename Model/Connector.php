@@ -13,18 +13,41 @@ class Connector
     protected $debug;
 
     protected $post;
+    
+    protected $forcedPhpBin;
 
     protected $replacements = array(
         '<?php' => 'PHP_OPEN_TAG',
         '?>' => 'PHP_END_TAG',
     );
+    
+    public function __construct(
+    	$forcedPhpBin = ''
+    ){
+    	if($forcedPhpBin){
+    		$this->forcedPhpBin = $forcedPhpBin;
+    	}
+    }
 
-    public function run()
+    public function run($forcedPhpBin = null)
     {
+    	if($forcedPhpBin){
+    		$this->forcedPhpBin = $forcedPhpBin;
+    	}
+    	
         $this->post = json_decode(base64_decode(file_get_contents('php://input')), true);
         if(!isset($this->post['code'], $this->post['cmd'])){
             header('HTTP/1.1 500 Server Error');
             return 'Post variables missing.';
+        }
+
+        // opcache flushing
+        if($this->post['cmd'] == 'flush-opcache'){
+            $result = 'opcache_reset doesn\'t exist';
+            if(function_exists('opcache_reset')){
+                $result = 'opcache flushed: '.json_encode(opcache_reset());
+            }
+            return $result;
         }
 
         $this->stdOut = '';
@@ -110,6 +133,13 @@ class Connector
     protected function locatePhp()
     {
         $this->debug .= '<hr />trying to locate php path<hr />';
+        if($this->forcedPhpBin){
+        	$this->debug .= 'forced path: '.$this->forcedPhpBin;
+            return array(
+                'success' => 1,
+                'output' => $this->forcedPhpBin,
+            );
+    	}
         //space to add default paths if required
         $potentialLocations = array();
         $envPath = trim(shell_exec('echo $PATH'));

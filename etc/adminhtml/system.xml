@@ -21,6 +21,10 @@
                     <backend_model>Mdoq\Connector\Model\Config\Backend\AuthKeyInterface</backend_model>
                     <frontend_model>Mdoq\Connector\Block\System\Config\Form\Field\AuthKey</frontend_model>
                 </field>
+                <field id="php_bin" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Path To Php</label>
+                    <comment>Should only be used in the MDOQ fails to auto-magically find PHP</comment>
+                </field>
             </group>
         </section>
     </system>

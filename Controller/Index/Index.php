@@ -14,6 +14,7 @@ class Index extends \Magento\Framework\App\Action\Action
     const CONFIG_PATH_ENABLED = 'mdoq_connector/connector/enable';
     const CONFIG_PATH_ENDPOINT = 'mdoq_connector/connector/url_key';
     const CONFIG_PATH_AUTHKEY = 'mdoq_connector/connector/auth_key';
+    const CONFIG_PATH_PHP_BIN = 'mdoq_connector/connector/php_bin';
 
     /** @var ScopeConfigInterface Magento\Framework\App\Config */
     protected  $configInterface;
@@ -48,9 +49,11 @@ class Index extends \Magento\Framework\App\Action\Action
                 $output->setHeader('Content-Type','text/plain')->setContents('MDOQ Connector Error: authentication failed. Check the auth keys in your Magento Admin match the auth keys set against your live instance in MDOQ.');
                 return $output;
             } else {
-                $jobOutput = $this->connector->run();
                 $output = $this->resultFactory->create(ResultFactory::TYPE_RAW);
-                $output->setHeader('Content-Type','text/plain')->setContents($jobOutput);
+                $output->setHeader('Content-Type','text/plain')
+                    ->setContents(
+                        $this->connector->run($this->getPhpBin())
+                    );
                 return $output;
             }
         }
@@ -119,5 +122,10 @@ class Index extends \Magento\Framework\App\Action\Action
     public function getAuthKey()
     {
         return $this->configInterface->getValue(self::CONFIG_PATH_AUTHKEY);
+    }
+    
+    public function getPhpBin()
+    {
+    	return $this->configInterface->getValue(self::CONFIG_PATH_PHP_BIN);
     }
 }
