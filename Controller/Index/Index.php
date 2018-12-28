@@ -3,13 +3,15 @@ namespace Mdoq\Connector\Controller\Index;
 
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
 use Mdoq\Connector\Model\Connector;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\CsrfAwareActionInterface;
 
-class Index extends \Magento\Framework\App\Action\Action
+class Index extends \Magento\Framework\App\Action\Action implements CsrfAwareActionInterface
 {
     const CONFIG_PATH_ENABLED = 'mdoq_connector/connector/enable';
     const CONFIG_PATH_ENDPOINT = 'mdoq_connector/connector/url_key';
@@ -123,9 +125,35 @@ class Index extends \Magento\Framework\App\Action\Action
     {
         return $this->configInterface->getValue(self::CONFIG_PATH_AUTHKEY);
     }
-    
+
     public function getPhpBin()
     {
-    	return $this->configInterface->getValue(self::CONFIG_PATH_PHP_BIN);
+        return $this->configInterface->getValue(self::CONFIG_PATH_PHP_BIN);
+    }
+
+    /**
+     * Create exception in case CSRF validation failed.
+     * Return null if default exception will suffice.
+     *
+     * @param RequestInterface $request
+     *
+     * @return InvalidRequestException|null
+     */
+    public function createCsrfValidationException(RequestInterface $request): ?InvalidRequestException
+    {
+        return null;
+    }
+
+    /**
+     * Perform custom request validation.
+     * Return null if default validation is needed.
+     *
+     * @param RequestInterface $request
+     *
+     * @return bool|null
+     */
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return true;
     }
 }
