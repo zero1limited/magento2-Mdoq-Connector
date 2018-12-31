@@ -5,4 +5,7 @@
     
     <!-- bypass product image lookup -->
     <preference for="Magento\Catalog\Model\Product\Image" type="Mdoq\Connector\MagentoCatalog\Model\Product\Image" />
+    
+    <!-- adding csrf validation for rewritten locations -->
+    <preference for="Magento\Framework\App\Action\Forward" type="Mdoq\Connector\MagentoFramework\App\Action\Forward" />
 </config>
