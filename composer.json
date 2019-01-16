@@ -8,7 +8,7 @@
     "type": "magento2-module",
     "version": "1.3.0",
     "license": [
-        "commercial"
+        "proprietary"
     ],
     "autoload": {
         "files": [
