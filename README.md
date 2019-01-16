@@ -1,4 +1,4 @@
-# magento2-Connector
+# magento2-Mdoq-Connector
 
 ## Changelog
 
