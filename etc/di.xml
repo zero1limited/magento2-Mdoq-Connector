@@ -2,23 +2,10 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Mdoq\Connector\Model\Config\Backend\UrlKeyInterface" type="Mdoq\Connector\Model\Config\Backend\UrlKey" />
     <preference for="Mdoq\Connector\Model\Config\Backend\AuthKeyInterface" type="Mdoq\Connector\Model\Config\Backend\AuthKey" />
-
+    
     <!-- bypass product image lookup -->
     <preference for="Magento\Catalog\Model\Product\Image" type="Mdoq\Connector\MagentoCatalog\Model\Product\Image" />
-
+    
     <!-- adding csrf validation for rewritten locations -->
     <preference for="Magento\Framework\App\Action\Forward" type="Mdoq\Connector\MagentoFramework\App\Action\Forward" />
-
-    <!-- MDOQ database backups -->
-    <type name="Magento\Framework\Console\CommandList">
-        <arguments>
-            <argument name="commands" xsi:type="array">
-                <item name="mdoq_backup" xsi:type="object">Mdoq\Connector\Console\Command\BackupCommand</item>
-            </argument>
-        </arguments>
-    </type>
-
-    <preference for="Magento\Framework\Setup\BackupRollback" type="Mdoq\Connector\MagentoFramework\Setup\BackupRollback" />
-    <preference for="Magento\Framework\Backup\Db" type="Mdoq\Connector\MagentoFramework\Backup\Db" />
-    <preference for="Magento\Backup\Model\Db" type="Mdoq\Connector\Backup\Db" />
 </config>
