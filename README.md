@@ -1,4 +1,4 @@
-# magento2-Mdoq-Connector
+# magento2-Connector
 
 ## Changelog
 
@@ -9,6 +9,8 @@
     - added CSRF support
 - 1.4.0 -> 1.4.1
     - bug fix: rewritten requests failing CSRF validation
+- 1.4.1 -> 1.4.2
+    - added backup support
 
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
