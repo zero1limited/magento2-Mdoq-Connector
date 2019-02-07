@@ -1,7 +1,8 @@
 # magento2-Mdoq-Connector
 
 ## Changelog
-
+- 1.3.0 -> 1.3.1
+    - updated requirements/dependencies
 - 1.2.0 -> 1.3.0
     - added initial 'Production as CDN' support
 - 1.4.0 
