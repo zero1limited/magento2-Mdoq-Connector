@@ -19,7 +19,7 @@
     "support": {
         "email": "sales@mdoq.io",
         "docs": "https://docs.mdoq.io"
-    }
+    },
     "autoload": {
         "files": [
             "registration.php"
