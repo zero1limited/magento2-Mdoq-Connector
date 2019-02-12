@@ -102,7 +102,7 @@ class BackupCommand extends Command
     {
         if(!$input->getOption(self::INPUT_KEY_DB) && !$input->getOption(self::INPUT_KEY_SANITISED_DB)) {
             throw new \InvalidArgumentException(
-                'Invalid arguments. Use \'--full-db\' for a full database backup, or \'--sanitised-db\' for a sanitised backup. If using a \'--sanitised-db\' you can provide additional tables to be excluded (comma separated). Example: \'--sanitised-db --excluded-tables table1,table2\''
+                'Invalid arguments. Use \'--full-db\' for a full database backup, or \'--sanitised-db\' for a sanitised backup. If using a \'--sanitised-db\' you can provide additional tables to be excluded (comma separated). Example: \'--sanitised-db table1,table2\''
             );
         }
 
