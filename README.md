@@ -7,7 +7,7 @@
     - updated requirements/dependencies
 - 1.3.1 -> 1.3.3
     - added backup functionality
--1.3.3 -> 1.3.4
+- 1.3.3 -> 1.3.4
     - backups now use mysqldump, much quicker
     
 - 1.4.0 
