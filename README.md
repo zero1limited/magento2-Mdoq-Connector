@@ -7,6 +7,8 @@
     - updated requirements/dependencies
 - 1.3.1 -> 1.3.3
     - added backup functionality
+-1.3.3 -> 1.3.4
+    - backups now use mysqldump, much quicker
     
 - 1.4.0 
     - added support for 2.3.x
@@ -17,6 +19,9 @@
     - added backup functionality
 - 1.4.2 -> 1.4.3
     - fixed typo in backup command help
+- 1.4.3 -> 1.4.4
+    - backups now use mysqldump, much quicker
+
 
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
