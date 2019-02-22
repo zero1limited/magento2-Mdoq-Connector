@@ -1,13 +1,8 @@
 <?php
-/**
- * Copyright © Magento, Inc. All rights reserved.
- * See COPYING.txt for license details.
- */
 namespace Mdoq\Connector\Console\Command;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\Setup\BackupRollbackFactory;
+use Mdoq\Connector\Model\Backup;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -28,20 +23,6 @@ class BackupCommand extends Command
     const ARGUMENT_EXCLUDE_TABLES = 'excluded-tables';
 
     /**
-     * Object Manager
-     *
-     * @var ObjectManagerInterface
-     */
-    private $objectManager;
-
-    /**
-     * Factory for BackupRollback
-     *
-     * @var BackupRollbackFactory
-     */
-    private $backupRollbackFactory;
-
-    /**
      * Existing deployment config
      *
      * @var DeploymentConfig
@@ -49,19 +30,26 @@ class BackupCommand extends Command
     private $deploymentConfig;
 
     /**
+     * MDOQ Backup class
+     *
+     * @var Backup
+     */
+    protected $backup;
+
+    /**
      * Constructor
      *
      * @param DeploymentConfig $deploymentConfig
-     * @param BackupRollbackFactory $backupRollbackFactory
+     * @param Backup $backup
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         DeploymentConfig $deploymentConfig,
-        BackupRollbackFactory $backupRollbackFactory
+        \Mdoq\Connector\Model\Backup $backup
     ) {
-        $this->backupRollbackFactory = $backupRollbackFactory;
         $this->deploymentConfig = $deploymentConfig;
+        $this->backup = $backup;
         parent::__construct();
     }
 
@@ -122,15 +110,30 @@ class BackupCommand extends Command
         try {
             $inputOptionProvided = false;
             $time = time();
-            $backupHandler = $this->backupRollbackFactory->create($output);
             if ($input->getOption(self::INPUT_KEY_DB)) {
                 $this->setAreaCode();
-                $backupHandler->dbBackup($time, false, null);
+                $output->writeln("<info>Starting MDOQ full DB backup. Time: ".time()."</info>");
+                $response = $this->backup->runBackup(false, null);
+                if(!isset($response['backupName']) || !isset($response['backupPath'])) {
+                    throw new \Exception('An error occurred while creating the backup.');
+                }
+
+                $output->writeln("<info>DB backup filename: ".$response['backupName']."</info>");
+                $output->writeln("<info>DB backup path: ".$response['backupPath']."</info>");
+
                 $inputOptionProvided = true;
             }
             if ($input->getOption(self::INPUT_KEY_SANITISED_DB)) {
                 $this->setAreaCode();
-                $backupHandler->dbBackup($time, true, $input->getArgument(self::ARGUMENT_EXCLUDE_TABLES));
+                $output->writeln("<info>Starting MDOQ sanitised DB backup. Time: ".time()."</info>");
+                $response = $this->backup->runBackup(true, $input->getArgument(self::ARGUMENT_EXCLUDE_TABLES));
+
+                if(!isset($response['backupName']) || !isset($response['backupPath'])) {
+                    throw new \Exception('An error occurred while creating the backup.');
+                }
+                $output->writeln("<info>DB backup filename: ".$response['backupName']."</info>");
+                $output->writeln("<info>DB backup path: ".$response['backupPath']."</info>");
+
                 $inputOptionProvided = true;
             }
             if (!$inputOptionProvided) {
@@ -138,6 +141,8 @@ class BackupCommand extends Command
                     'Not enough information provided to take backup.'
                 );
             }
+
+            $output->writeln("<info>DB backup completed successfully.</info>");
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
