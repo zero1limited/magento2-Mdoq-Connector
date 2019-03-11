@@ -11,6 +11,8 @@
     - backups now use mysqldump, much quicker
 - 1.3.4 -> 1.3.5
     - fixed typo in readme
+- 1.3.5 -> 1.3.6
+    - improve server compatibility for backups
 - 1.4.0 
     - added support for 2.3.x
     - added CSRF support
@@ -26,6 +28,8 @@
     - fixed typo in readme
 - 1.4.5 -> 1.4.6
     - bug fix: missing class
+- 1.4.6 -> 1.4.7
+    - improve server compatibility for backups
 
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
