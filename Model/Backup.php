@@ -17,7 +17,24 @@ class Backup
     public function runBackup($sanitised = false, $excludedTables = null)
     {
         // Check mysqldump is installed
-        if(!$this->runCommand('which mysqldump')) {
+        try {
+            $paths = shell_exec('echo $PATH');
+            $paths = explode(':', $paths);
+
+            $fullMysqldumpPath = null;
+            foreach ($paths as $path) {
+                if (is_file($path . '/mysqldump')) {
+                    if (is_executable($path . '/mysqldump')) {
+                        $fullMysqldumpPath = $path . '/mysqldump';
+                        break;
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            throw new \Exception('A backup cannot be taken because \'mysqldump\' is not installed on your server. Please use the core Magento backup commands.');
+        }
+
+        if(!$fullMysqldumpPath) {
             throw new \Exception('A backup cannot be taken because \'mysqldump\' is not installed on your server. Please use the core Magento backup commands.');
         }
 
@@ -72,9 +89,9 @@ class Backup
 
         // Run the backup
         if($sanitised && $excludedTablesString != null) {
-            $command = 'mysqldump --user='.$credentials['username'].' --password='.$credentials['password'].' --host='.$credentials['host'].' '.$credentials['dbname'].$excludedTablesString.' > '.$backupPath;
+            $command = $fullMysqldumpPath.' --user='.$credentials['username'].' --password='.$credentials['password'].' --host='.$credentials['host'].' '.$credentials['dbname'].$excludedTablesString.' > '.$backupPath;
         } else {
-            $command = 'mysqldump --user='.$credentials['username'].' --password='.$credentials['password'].' --host='.$credentials['host'].' '.$credentials['dbname'].' > '.$backupPath;
+            $command = $fullMysqldumpPath.' --user='.$credentials['username'].' --password='.$credentials['password'].' --host='.$credentials['host'].' '.$credentials['dbname'].' > '.$backupPath;
         }
 
         $this->runCommand($command);
@@ -87,38 +104,41 @@ class Backup
 
     protected function runCommand($cmd)
     {
-        $descriptor = array(
-            0 => array('pipe', 'r'),    // Input
-            1 => array('pipe', 'w'),    // StdOut
-            2 => array('pipe', 'w'),    // ErrOut
-        );
+//        $descriptor = array(
+//            0 => array('pipe', 'r'),    // Input
+//            1 => array('pipe', 'w'),    // StdOut
+//            2 => array('pipe', 'w'),    // ErrOut
+//        );
+//
+//        $pipes = array();
+//        $process = proc_open($cmd, $descriptor, $pipes, null, array('cmd' => $cmd));
+//        if (is_resource($process)) {
+//            // StdOut
+//            $stdOut = stream_get_contents($pipes[1]);
+//            fclose($pipes[1]);
+//
+//            // ErrOut
+//            $errOut = stream_get_contents($pipes[2]);
+//            fclose($pipes[2]);
+//
+//            proc_close($process);
+//        } else {
+//            throw new \Exception('An error occurred while creating the backup.');
+//        }
+//
+//        if (!empty($errOut)) {
+//            if(is_string($errOut)) {
+//                if(strpos($errOut, '[Warning]') === false) {
+//                    throw new \Exception('An error occurred while creating the backup.');
+//                }
+//            } else {
+//                throw new \Exception('An error occurred while creating the backup.');
+//            }
+//        }
+//
+//        return trim($stdOut);
 
-        $pipes = array();
-        $process = proc_open($cmd, $descriptor, $pipes, null, array('cmd' => $cmd));
-        if (is_resource($process)) {
-            // StdOut
-            $stdOut = stream_get_contents($pipes[1]);
-            fclose($pipes[1]);
-
-            // ErrOut
-            $errOut = stream_get_contents($pipes[2]);
-            fclose($pipes[2]);
-
-            proc_close($process);
-        } else {
-            throw new \Exception('An error occurred while creating the backup.');
-        }
-
-        if (!empty($errOut)) {
-            if(is_string($errOut)) {
-                if(strpos($errOut, '[Warning]') === false) {
-                    throw new \Exception('An error occurred while creating the backup.');
-                }
-            } else {
-                throw new \Exception('An error occurred while creating the backup.');
-            }
-        }
-
-        return trim($stdOut);
+        $response = shell_exec($cmd);
+        return trim($response);
     }
 }
