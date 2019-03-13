@@ -18,7 +18,7 @@ class Backup
     {
         // Check mysqldump is installed
         try {
-            $paths = shell_exec('echo $PATH');
+            $paths = shell_exec('echo -n $PATH');
             $paths = explode(':', $paths);
 
             $fullMysqldumpPath = null;
