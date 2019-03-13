@@ -26,6 +26,8 @@
     - fixed typo in readme
 - 1.4.5 -> 1.4.6
     - bug fix: missing class
+- 1.4.6 => 1.4.7
+    - bug fix: unable to locate mysqldump from $PATH
 
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
