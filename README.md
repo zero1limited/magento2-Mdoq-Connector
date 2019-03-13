@@ -13,6 +13,8 @@
     - fixed typo in readme
 - 1.3.5 -> 1.3.6
     - improve server compatibility for backups
+- 1.3.6 -> 1.3.7
+    - bug fix: unable to locate mysqldump from $PATH
 - 1.4.0 
     - added support for 2.3.x
     - added CSRF support
