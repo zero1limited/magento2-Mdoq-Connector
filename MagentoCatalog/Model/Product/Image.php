@@ -46,4 +46,17 @@ class Image extends \Magento\Catalog\Model\Product\Image
     	}
     	return parent::saveFile();
     }
+
+    /**
+     * Return resized product image information
+     *
+     * @return array
+     */
+    public function getResizedImageInfo()
+    {
+        if($this->isEnvironmentMdoq()){
+            return null;
+        }
+        return parent::getResizedImageInfo();
+    }
 }
