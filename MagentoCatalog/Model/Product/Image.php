@@ -59,4 +59,17 @@ class Image extends \Magento\Catalog\Model\Product\Image
         }
         return parent::getResizedImageInfo();
     }
+
+    /**
+     * Set filenames for base file and new file
+     *
+     * @param string $file
+     * @return $this
+     */
+    public function setBaseFile($file) {
+        if($this->isEnvironmentMdoq()) {
+            return $this;
+        }
+        return parent::setBaseFile($file);
+    }
 }
