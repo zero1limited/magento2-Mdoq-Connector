@@ -11,6 +11,11 @@
                     <label>Enable MDOQ Connector</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="admin_access_enable" translate="label" type="select" sortOrder="2" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Enable Access from Admin</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Warning: This will allow connections to the MDOQ Connector at 'https://baseurl.com/adminpath/backendconnector/connector/index'. Please use temporarily and make sure suitable IP / access blocking is in place.</comment>
+                </field>
                 <field id="url_key" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
                     <label>API Endpoint</label>
                     <backend_model>Mdoq\Connector\Model\Config\Backend\UrlKeyInterface</backend_model>

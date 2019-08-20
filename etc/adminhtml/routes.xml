@@ -4,6 +4,9 @@
         <route id="adminhtml">
             <module name="Mdoq_Connector" before="Magento_Backend" />
         </route>
+        <route id="backendconnector" frontName="backendconnector">
+            <module name="Mdoq_Connector" before="Magento_Backend" />
+        </route>
     </router>
 </config>
 
