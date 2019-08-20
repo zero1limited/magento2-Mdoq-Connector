@@ -15,9 +15,9 @@
     - improve server compatibility for backups
 - 1.3.6 -> 1.3.7
     - bug fix: unable to locate mysqldump from $PATH
-- 1.3.8-> 1.3.9
+- 1.3.8 -> 1.3.9
     - bug fix: missing images on MDOQ instances
-- 1.3.9-> 1.3.10
+- 1.3.9 -> 1.3.10
     - bug fix: image file errors on MDOQ instances
 - 1.4.0 
     - added support for 2.3.x
@@ -36,12 +36,14 @@
     - bug fix: missing class
 - 1.4.6 -> 1.4.7
     - improve server compatibility for backups
-- 1.4.7 => 1.4.8
+- 1.4.7 -> 1.4.8
     - bug fix: unable to locate mysqldump from $PATH
-- 1.4.8-> 1.4.9
+- 1.4.8 -> 1.4.9
     - bug fix: missing images on MDOQ instances
-- 1.4.9-> 1.4.10
+- 1.4.9 -> 1.4.10
     - bug fix: image file errors on MDOQ instances
+- 1.4.10 -> 1.4.11
+    - added functionality for endpoint to be present on Magento admin
 
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
