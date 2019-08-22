@@ -44,6 +44,8 @@
     - bug fix: image file errors on MDOQ instances
 - 1.4.10 -> 1.4.11
     - added functionality for endpoint to be present on Magento admin
+- 1.4.11 -> 1.4.12
+    - bug fixes
 
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
