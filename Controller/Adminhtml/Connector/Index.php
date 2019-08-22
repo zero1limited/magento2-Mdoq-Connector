@@ -1,7 +1,7 @@
 <?php
 namespace Mdoq\Connector\Controller\Adminhtml\Connector;
 
-use Magento\Framework\App\Action\Context;
+use \Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Mdoq\Connector\Model\Connector;
 use Magento\Framework\Controller\ResultFactory;
