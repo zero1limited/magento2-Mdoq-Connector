@@ -68,7 +68,8 @@ class Image extends \Magento\Catalog\Model\Product\Image
      */
     public function setBaseFile($file) {
         if($this->isEnvironmentMdoq()) {
-            return $this;
+            $file = 'no_selection';
+            return parent::setBaseFile($file);
         }
         return parent::setBaseFile($file);
     }
