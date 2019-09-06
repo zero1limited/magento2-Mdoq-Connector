@@ -19,6 +19,8 @@
     - bug fix: missing images on MDOQ instances
 - 1.3.9 -> 1.3.10
     - bug fix: image file errors on MDOQ instances
+- 1.3.10 -> 1.3.11
+    - fixed admin grid bug on MDOQ instances only
 - 1.4.0 
     - added support for 2.3.x
     - added CSRF support
@@ -46,6 +48,8 @@
     - added functionality for endpoint to be present on Magento admin
 - 1.4.11 -> 1.4.12
     - bug fixes
+- 1.4.12 -> 1.4.13
+    - fixed admin grid bug on MDOQ instances only
 
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
