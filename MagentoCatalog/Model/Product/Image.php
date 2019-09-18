@@ -73,4 +73,17 @@ class Image extends \Magento\Catalog\Model\Product\Image
         }
         return parent::setBaseFile($file);
     }
+
+    /**
+     * Check is image cached
+     *
+     * @return bool
+     */
+    public function isCached()
+    {
+        if($this->isEnvironmentMdoq()) {
+            return false;
+        }
+        return parent::isCached();
+    }
 }
