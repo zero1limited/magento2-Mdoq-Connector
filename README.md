@@ -50,6 +50,8 @@
     - bug fixes
 - 1.4.12 -> 1.4.13
     - fixed admin grid bug on MDOQ instances only
+- 1.4.13 -> 1.4.14
+    - removed cache media urls when on MDOQ
 
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
