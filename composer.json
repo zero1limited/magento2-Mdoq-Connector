@@ -2,11 +2,10 @@
     "name": "mdoq\/module-connector",
     "description": "Enables you to use Mdoq for your magento site",
     "require": {
-        "php": "~5.5.0|~5.6.0|^7.0.0",
-        "magento\/product-community-edition": "^2.3.0"
+        "php": "~5.5.0|~5.6.0|^7.0.0"
     },
     "type": "magento2-module",
-    "version": "1.4.14",
+    "version": "1.4.15",
     "license": [
         "proprietary"
     ],
