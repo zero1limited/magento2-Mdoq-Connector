@@ -54,6 +54,9 @@
     - removed cache media urls when on MDOQ
 - 1.4.14 -> 1.4.15
     - removing magento community edition requirement
+- 1.4.15 -> 1.4.16
+    - small performance improvement when checking current environment  
+    - remove cache hash from image urls when on MDOQ  
 
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
