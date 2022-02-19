@@ -44,6 +44,6 @@ class Image extends \Magento\Catalog\Model\Product\Image
     	if($this->isEnvironmentMdoq()){
     		return $this;
     	}
-    	return parent::saveFile();
+	return parent::resize();
     }
 }
