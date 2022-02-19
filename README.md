@@ -57,7 +57,9 @@
 - 1.4.15 -> 1.4.16
     - small performance improvement when checking current environment  
     - remove cache hash from image urls when on MDOQ  
-
+- 1.4.16 -> 1.4.17
+    - fixed: issue with image resizing see [PR](https://github.com/zero1limited/magento2-Mdoq-Connector/pull/4) for more info.
+    
 ## Magento version support
  - Magento 2.2.xx compatibility is maintained in branch 1.3.xx
  - Magento 2.3.xx compatibility is maintained in branch 1.4.xx
