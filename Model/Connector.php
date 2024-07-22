@@ -92,7 +92,7 @@ class Connector
             return $this->debug;
         }
 
-        if (!empty($this->errOut)) {
+        if (empty($this->stdOut) && !empty($this->errOut)) {
             $this->debug .= 'Error Out<br />';
             $this->debug .= $this->errOut;
             header('HTTP/1.1 500 Server Error');
@@ -102,6 +102,7 @@ class Connector
         return json_encode(array(
             'debug' => $this->debug,
             'content' => $this->stdOut,
+            'error' => $this->errOut,
         ));
     }
 
