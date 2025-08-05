@@ -22,9 +22,9 @@ class AuthKey extends \Magento\Framework\App\Config\Value implements \Magento\Fr
 		\Magento\Framework\Registry $registry,
 		\Magento\Framework\App\Config\ScopeConfigInterface $config,
 		\Magento\Framework\App\Cache\TypeListInterface $cacheTypeList,
-		\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-		\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 		\Magento\Framework\ObjectManagerInterface $objectManagerInterface,
+		?\Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
+		?\Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
 		array $data = []
 	) {
 		parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
